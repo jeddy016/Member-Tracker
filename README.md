@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [<img src="https://img.shields.io/travis/playframework/play-java-starter-example.svg"/>](https://travis-ci.org/playframework/play-java-starter-example)
 
 # Play Java Starter
@@ -55,3 +56,7 @@ There are several demonstration files available in this template.
 - ExampleFilter.java
 
   A simple filter that adds a header to every response.
+=======
+# Member-Tracker
+An app to help a local networking group keep track of their member base
+>>>>>>> 5423079ecb2bd7b10ee4dd5a858bfcaa4f34cc89
