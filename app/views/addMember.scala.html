@@ -1,0 +1,51 @@
+@(chapters: List[Chapter])
+
+<html>
+<body>
+    <div class="wrapper">
+        <h1>Add Member</h1>
+        <form name="add-member" method ="POST" action="@routes.MemberController.addMember">
+            <table>
+                <tr>
+                    <td><label>First Name:</label></td>
+                    <td><input name="firstName" /></td>
+                    <td><label>Last Name:</label></td>
+                    <td><input name="lastName" /></td>
+                </tr>
+                <tr>
+                    <td><label>Email:</label></td>
+                    <td><input name="email" /></td>
+                    <td><label>Phone:</label></td>
+                    <td><input name="phone" /></td>
+                </tr>
+                <tr>
+                    <td><label>Company:</label></td>
+                    <td><input name="company" /></td>
+                    <td><label>Job Title:</label></td>
+                    <td><input name="job" /></td>
+                </tr>
+                <tr>
+                    <td><label>Date Joined:</label></td>
+                    <td><input name="joinDate" /></td>
+                    <td><label>Chapter:</label></td>
+                    <td>
+                        <select name="chapter">
+                            @for(chapter <- chapters){
+                            <option value="@chapter.getID">@chapter.getName</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Volunteer:</label></td>
+                    <td>
+                        <input type="radio" name="volunteer" value="1"/> Yes
+                        <input type="radio" name="volunteer" value="0"/> No
+                    </td>
+                </tr>
+            </table>
+            <button>Submit</button>
+        </form>
+    </div>
+</body>
+</html>

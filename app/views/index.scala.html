@@ -1,0 +1,95 @@
+@(members : List[MemberDetail], chapters: List[Chapter])
+
+<html>
+<body>
+    <div class = "wrapper">
+
+        <div class="header">
+        </div>
+
+        <div class ="sidebar">
+        </div>
+
+        <div class="content-container">
+            <h2>Members</h2>
+
+            <div class="search">
+                <form action="@routes.SearchController.search" method="GET">
+                    <table>
+                        <tr>
+                            <td><label>Search </label></td>
+                            <td><input name="input" /></td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <input type="checkbox" value="yes" name="apply-filters">
+                                <label>Filters</label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><label>Chapter:</label></td>
+                            <td>
+                                <select name="chapter-filter">
+                                    @for(chapter <- chapters){
+                                    <option value="@chapter.getName">@chapter.getName</option>
+                                    }
+                                </select>
+                            </td>
+
+                            <td><label>Volunteer:</label></td>
+                            <td>
+                                <input type="radio" name="vol-filter" value="-1" checked>N/A
+                                <input type="radio" name="vol-filter" value="1">Yes
+                                <input type="radio" name="vol-filter" value="0">No
+                            </td>
+
+                            <td><label>Member For:</label></td>
+                            <td>
+                                <input type="radio" name="date-filter" value="-1" checked> N/A
+                                <input type="radio" name="date-filter" value="0"> < 1 yr
+                                <input type="radio" name="date-filter" value="1"> 1-3 yrs
+                                <input type="radio" name="date-filter" value="2"> > 3 yrs
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><button>Go</button></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+
+            <table>
+                <tr>
+                    <th>First</th>
+                    <th>Last</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Chapter</th>
+                    <th>Date Joined</th>
+                    <th>Company</th>
+                    <th>Job Title</th>
+                    <th>Volunteer</th>
+                </tr>
+            @for(member <- members){
+                <tr>
+                    <td>@member.getFirstName</td>
+                    <td>@member.getLastName</td>
+                    <td>@member.getEmail</td>
+                    <td>@member.getPhone</td>
+                    <td>@member.getChapter</td>
+                    <td>@member.getDateJoined</td>
+                    <td>@member.getCompany</td>
+                    <td>@member.getJobTitle</td>
+                    <td>@member.getVolunteer</td>
+
+                </tr>
+            }
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>
