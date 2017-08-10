@@ -80,9 +80,8 @@ public class SearchController extends Controller
 
             if(filterType.equals("chapter"))
             {
-                if(!input.equals("-"))
+                if(!input.equals("N/A"))
                 {
-                    Logger.debug("WRONG");
                     query.append(" AND ch.name LIKE \"").append(input).append("\" ");
                 }
             }

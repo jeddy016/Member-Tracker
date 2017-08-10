@@ -1,8 +1,13 @@
 @(members : List[MemberDetail], chapters: List[Chapter])
 
 <html>
+<head>
+    <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/stylesheets/main.css" />
+    <script src= "https://use.fontawesome.com/3d943843e1.js"></script>
+</head>
 <body>
-    <div class = "wrapper">
+    <div class="container">
 
         <div class="header">
         </div>
@@ -10,61 +15,59 @@
         <div class ="sidebar">
         </div>
 
-        <div class="content-container">
-            <h2>Members</h2>
+        <div class="content">
+            <h2 class="title">Members</h2>
 
-            <div class="search">
+            <div class="search-container">
                 <form action="@routes.SearchController.search" method="GET">
-                    <table>
-                        <tr>
-                            <td><label>Search </label></td>
-                            <td><input name="input" /></td>
-                        </tr>
 
-                        <tr>
-                            <td>
-                                <input type="checkbox" value="yes" name="apply-filters">
-                                <label>Filters</label>
-                            </td>
-                        </tr>
+                    <div class="search-bar">
+                        <i class="fa fa-search"></i>
+                        <input class="search-input" name="input" placeholder="eg: name, company, job title"/>
+                    </div>
 
-                        <tr>
-                            <td><label>Chapter:</label></td>
-                            <td>
-                                <select name="chapter-filter">
-                                    @for(chapter <- chapters){
-                                    <option value="@chapter.getName">@chapter.getName</option>
-                                    }
-                                </select>
-                            </td>
+                    <label class="filters-select"><input type="checkbox" value="yes" name="apply-filters"> Filters</label>
 
-                            <td><label>Volunteer:</label></td>
-                            <td>
-                                <input type="radio" name="vol-filter" value="-1" checked>N/A
-                                <input type="radio" name="vol-filter" value="1">Yes
-                                <input type="radio" name="vol-filter" value="0">No
-                            </td>
+                    <div class="filter-container">
+                        <table class="filter-table">
+                            <tr>
+                                <th class="filter-row">Chapter</th>
+                                <th class="filter-row">Volunteer</th>
+                                <th class="filter-row">Tenure</th>
+                            </tr>
 
-                            <td><label>Member For:</label></td>
-                            <td>
-                                <input type="radio" name="date-filter" value="-1" checked> N/A
-                                <input type="radio" name="date-filter" value="0"> < 1 yr
-                                <input type="radio" name="date-filter" value="1"> 1-3 yrs
-                                <input type="radio" name="date-filter" value="2"> > 3 yrs
-                            </td>
-                        </tr>
+                            <tr class="filter-row">
+                                <td class="filter-data">
+                                    <select class="form-control" name="chapter-filter">
+                                        @for(chapter <- chapters){
+                                        <option value="@chapter.getName">@chapter.getName</option>
+                                        }
+                                    </select>
+                                </td>
 
-                        <tr>
-                            <td><button>Go</button></td>
-                        </tr>
-                    </table>
+                                <td class="filter-data">
+                                    <label class="filter-label"><input type="radio" name="vol-filter" value="-1" checked>N/A</label>
+                                    <label class="filter-label"><input type="radio" name="vol-filter" value="1">Yes</label>
+                                    <label class="filter-label"><input type="radio" name="vol-filter" value="0">No</label>
+                                </td>
+
+                                <td class="filter-data">
+                                    <label class="filter-label"><input type="radio" name="date-filter" value="-1" checked> N/A</label>
+                                    <label class="filter-label"><input type="radio" name="date-filter" value="0"> < 1yr</label>
+                                    <label class="filter-label"><input type="radio" name="date-filter" value="1"> 1-3yrs</label>
+                                    <label class="filter-label"><input type="radio" name="date-filter" value="2"> > 3yrs</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <button class="btn btn-success">Submit</button>
+                    <a href="@routes.BaseController.index" class="btn btn-danger reset-link">Reset All</a>
                 </form>
             </div>
 
             <table>
                 <tr>
-                    <th>First</th>
-                    <th>Last</th>
+                    <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Chapter</th>
@@ -73,18 +76,23 @@
                     <th>Job Title</th>
                     <th>Volunteer</th>
                 </tr>
-            @for(member <- members){
-                <tr>
-                    <td>@member.getFirstName</td>
-                    <td>@member.getLastName</td>
-                    <td>@member.getEmail</td>
-                    <td>@member.getPhone</td>
-                    <td>@member.getChapter</td>
-                    <td>@member.getDateJoined</td>
-                    <td>@member.getCompany</td>
-                    <td>@member.getJobTitle</td>
-                    <td>@member.getVolunteer</td>
+            @if(members.size > 0){
+                @for(member <- members){
+                    <tr class="members-row">
+                        <td>@member.getFullName</td>
+                        <td><a href="mailto:@member.getEmail">@member.getEmail</a></td>
+                        <td>@member.getPhone</td>
+                        <td>@member.getChapter</td>
+                        <td>@member.getDateJoined</td>
+                        <td>@member.getCompany</td>
+                        <td>@member.getJobTitle</td>
+                        <td>@member.getVolunteer</td>
 
+                    </tr>
+                }
+            }else{
+                <tr>
+                    <td><h4>:( No members found</h4></td>
                 </tr>
             }
             </table>
@@ -92,4 +100,5 @@
 
     </div>
 </body>
+<script src="assets/javascripts/main.js"> </script>
 </html>
