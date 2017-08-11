@@ -43,7 +43,7 @@ public class SearchController extends Controller
         String applyFilters = form.get("apply-filters");
         String searchInput = form.get("input");
 
-        if(applyFilters != null)
+        if(applyFilters.equals("yes"))
         {
             String chapterFilter = form.get("chapter-filter");
             String volunteerFilter = form.get("vol-filter");
@@ -104,7 +104,7 @@ public class SearchController extends Controller
                     }
                     if(input.equals("1"))
                     {
-                        query.append(" AND (TIMESTAMPDIFF(YEAR, m.date_joined, CURDATE()) > 1) AND (TIMESTAMPDIFF(YEAR, date_joined, CURDATE()) < 3) ");
+                        query.append(" AND (TIMESTAMPDIFF(YEAR, date_joined, CURDATE()) < 3) ");
                     }
                     if(input.equals("2"))
                     {

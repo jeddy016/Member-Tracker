@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/stylesheets/main.css" />
     <script src= "https://use.fontawesome.com/3d943843e1.js"></script>
+    <script src="/assets/lib/jquery/jquery.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -26,7 +27,8 @@
                         <input class="search-input" name="input" placeholder="eg: name, company, job title"/>
                     </div>
 
-                    <label class="filters-select"><input type="checkbox" value="yes" name="apply-filters"> Filters</label>
+                    <input id="filters-flag" type="hidden" value="no" name="apply-filters">
+                    <label id="filters-select">Filters</label>
 
                     <div class="filter-container">
                         <table class="filter-table">
@@ -53,13 +55,14 @@
 
                                 <td class="filter-data">
                                     <label class="filter-label"><input type="radio" name="date-filter" value="-1" checked> N/A</label>
-                                    <label class="filter-label"><input type="radio" name="date-filter" value="0"> < 1yr</label>
-                                    <label class="filter-label"><input type="radio" name="date-filter" value="1"> 1-3yrs</label>
-                                    <label class="filter-label"><input type="radio" name="date-filter" value="2"> > 3yrs</label>
+                                    <label class="filter-label"><input type="radio" name="date-filter" value="0"><1yr</label>
+                                    <label class="filter-label"><input type="radio" name="date-filter" value="1"><3yrs</label>
+                                    <label class="filter-label"><input type="radio" name="date-filter" value="2">>3yrs</label>
                                 </td>
                             </tr>
                         </table>
                     </div>
+                    <br>
                     <button class="btn btn-success">Submit</button>
                     <a href="@routes.BaseController.index" class="btn btn-danger reset-link">Reset All</a>
                 </form>
@@ -100,5 +103,5 @@
 
     </div>
 </body>
-<script src="assets/javascripts/main.js"> </script>
+<script src="assets/javascripts/main.js"></script>
 </html>
