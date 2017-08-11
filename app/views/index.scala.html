@@ -1,5 +1,7 @@
 @(members : List[MemberDetail], chapters: List[Chapter])
 
+<!--TODO: Make member names click-able, send to edit user page-->
+
 <html>
 <head>
     <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
@@ -8,99 +10,102 @@
     <script src="/assets/lib/jquery/jquery.min.js"></script>
 </head>
 <body>
-    <div class="container">
 
-        <div class="header">
+    <div class="header">
+    </div>
+
+    <div class ="sidebar">
+        <a href="http://www.winwoman.org"><img class="logo" src="/assets/images/win-logo.png" /></a>
+        <ul class="menu">
+            <a class="menu-item" href="@routes.MemberController.renderAddMember"><li>Add Member</li></a>
+            <a class="menu-item" href="@routes.MemberController.renderAddMember"><li>Chapters</li></a>
+        </ul>
+    </div>
+
+    <div class="content-container">
+        <h2 class="title">Members</h2>
+        <hr>
+        <div class="search-container">
+            <form action="@routes.SearchController.search" method="GET" id="search-form">
+
+                <div class="search-bar">
+                    <i class="fa fa-search"></i>
+                    <input class="search-input" name="input" placeholder="eg: name, company, job title"/>
+                </div>
+
+                <!--<a href="@routes.BaseController.index" class="btn btn-danger reset-link">Reset</a>-->
+
+                <input id="filters-flag" type="hidden" value="no" name="apply-filters">
+                <label id="filters-select">Filters</label>
+                <button class="btn btn-success" form="search-form">Submit</button>
+
+
+                <div class="filter-container">
+                    <table class="filter-table">
+                        <tr>
+                            <th class="filter-row">Chapter</th>
+                            <th class="filter-row">Volunteer</th>
+                            <th class="filter-row">Tenure</th>
+                        </tr>
+
+                        <tr class="filter-row">
+                            <td class="filter-data">
+                                <select class="form-control" name="chapter-filter">
+                                    @for(chapter <- chapters){
+                                    <option value="@chapter.getName">@chapter.getName</option>
+                                    }
+                                </select>
+                            </td>
+
+                            <td class="filter-data">
+                                <input type="radio" name="vol-filter" value="-1" id="r1" checked><label for="r1">N/A</label>
+                                <input type="radio" name="vol-filter" value="1" id="r2"><label for="r2">Yes</label>
+                                <input type="radio" name="vol-filter" value="0" id="r3"><label for="r3">No</label>
+                            </td>
+
+                            <td class="filter-data">
+                                <input type="radio" name="date-filter" value="-1" id="r4" checked><label for="r4">N/A</label>
+                                <input type="radio" name="date-filter" value="0" id="r5"><label for="r5">< 1yr</label>
+                                <input type="radio" name="date-filter" value="1" id="r6"><label for="r6">< 3yrs</label>
+                                <input type="radio" name="date-filter" value="2" id="r7"><label for="r7">3+ yrs</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
         </div>
 
-        <div class ="sidebar">
-        </div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Chapter</th>
+                <th>Date Joined</th>
+                <th>Company</th>
+                <th>Job Title</th>
+                <th>Volunteer</th>
+            </tr>
+        @if(members.size > 0){
+            @for(member <- members){
+                <tr class="members-row">
+                    <td>@member.getFullName</td>
+                    <td><a href="mailto:@member.getEmail">@member.getEmail</a></td>
+                    <td>@member.getPhone</td>
+                    <td>@member.getChapter</td>
+                    <td>@member.getDateJoined</td>
+                    <td>@member.getCompany</td>
+                    <td>@member.getJobTitle</td>
+                    <td>@member.getVolunteer</td>
 
-        <div class="content">
-            <h2 class="title">Members</h2>
-
-            <div class="search-container">
-                <form action="@routes.SearchController.search" method="GET">
-
-                    <div class="search-bar">
-                        <i class="fa fa-search"></i>
-                        <input class="search-input" name="input" placeholder="eg: name, company, job title"/>
-                    </div>
-
-                    <input id="filters-flag" type="hidden" value="no" name="apply-filters">
-                    <label id="filters-select">Filters</label>
-
-                    <div class="filter-container">
-                        <table class="filter-table">
-                            <tr>
-                                <th class="filter-row">Chapter</th>
-                                <th class="filter-row">Volunteer</th>
-                                <th class="filter-row">Tenure</th>
-                            </tr>
-
-                            <tr class="filter-row">
-                                <td class="filter-data">
-                                    <select class="form-control" name="chapter-filter">
-                                        @for(chapter <- chapters){
-                                        <option value="@chapter.getName">@chapter.getName</option>
-                                        }
-                                    </select>
-                                </td>
-
-                                <td class="filter-data">
-                                    <label class="filter-label"><input type="radio" name="vol-filter" value="-1" checked>N/A</label>
-                                    <label class="filter-label"><input type="radio" name="vol-filter" value="1">Yes</label>
-                                    <label class="filter-label"><input type="radio" name="vol-filter" value="0">No</label>
-                                </td>
-
-                                <td class="filter-data">
-                                    <label class="filter-label"><input type="radio" name="date-filter" value="-1" checked> N/A</label>
-                                    <label class="filter-label"><input type="radio" name="date-filter" value="0"><1yr</label>
-                                    <label class="filter-label"><input type="radio" name="date-filter" value="1"><3yrs</label>
-                                    <label class="filter-label"><input type="radio" name="date-filter" value="2">>3yrs</label>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <br>
-                    <button class="btn btn-success">Submit</button>
-                    <a href="@routes.BaseController.index" class="btn btn-danger reset-link">Reset All</a>
-                </form>
-            </div>
-
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Chapter</th>
-                    <th>Date Joined</th>
-                    <th>Company</th>
-                    <th>Job Title</th>
-                    <th>Volunteer</th>
-                </tr>
-            @if(members.size > 0){
-                @for(member <- members){
-                    <tr class="members-row">
-                        <td>@member.getFullName</td>
-                        <td><a href="mailto:@member.getEmail">@member.getEmail</a></td>
-                        <td>@member.getPhone</td>
-                        <td>@member.getChapter</td>
-                        <td>@member.getDateJoined</td>
-                        <td>@member.getCompany</td>
-                        <td>@member.getJobTitle</td>
-                        <td>@member.getVolunteer</td>
-
-                    </tr>
-                }
-            }else{
-                <tr>
-                    <td><h4>:( No members found</h4></td>
                 </tr>
             }
-            </table>
-        </div>
-
+        }else{
+            <tr>
+                <td><h4>:( No members found</h4></td>
+            </tr>
+        }
+        </table>
     </div>
 </body>
 <script src="assets/javascripts/main.js"></script>
