@@ -11,3 +11,11 @@ $('#filters-select').click(function(){
         $('#filters-flag').val("no")
     }
 });
+
+$('.datepicker').datepicker(
+    {
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        autoclose: true
+    }
+);

@@ -1,0 +1,81 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    background: #DDDDDD;
+}
+
+*:focus {
+    outline: none;
+}
+
+form, table {
+    margin: 0 !important;
+    width: 40vw;
+}
+
+td, th {
+    padding: 0 8% 1% 0;
+}
+
+th {
+    padding-top: 3%;
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 2%;
+}
+
+.sidebar {
+    position: fixed;
+    height: 100%;
+    width: 12%;
+    background-color: #4C4C4C;
+    float: left;
+    text-align: center;
+}
+
+.logo {
+    margin-left: -28%;
+    margin-top: -9%;
+    width: 150%;
+}
+
+.menu {
+    margin-top: 5%;
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+li {
+    width: 100%;
+    padding: 5% 0;
+    border-bottom: 1px solid #FF3333;
+    border-top: 1px solid #FF3333;
+}
+
+li:hover {
+    background: #FF3333;
+}
+
+.menu-item {
+    color: white;
+    font-size: 1.6em;
+}
+
+.menu-item:hover {
+    text-decoration: none;
+    color: white;
+}
+
+.content-container {
+    float: right;
+    width: 88%;
+    padding: 2% 3% 2% 3%;
+}
+
+.btn {
+    width: 92%;
+    margin-top: 7%;
+}

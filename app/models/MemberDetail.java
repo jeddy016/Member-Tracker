@@ -38,6 +38,16 @@ public class MemberDetail
     @Column
     private String company;
 
+    public int getID()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
     public String getFirstName()
     {
         return firstName;

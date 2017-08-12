@@ -1,51 +1,88 @@
 @(chapters: List[Chapter])
 
 <html>
+<head>
+    <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/stylesheets/addMember.css" />
+    <script src= "https://use.fontawesome.com/3d943843e1.js"></script>
+    <script src="/assets/lib/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+</head>
 <body>
-    <div class="wrapper">
+    <div class="sidebar">
+        <a href="http://www.winwoman.org"><img class="logo" src="/assets/images/win-logo.png" /></a>
+        <ul class="menu">
+            <a class="menu-item" href="@routes.BaseController.index"><li>Members</li></a>
+            <a class="menu-item" href="@routes.ChapterController.index"><li>Chapters</li></a>
+        </ul>
+    </div>
+
+    <div class="content-container">
         <h1>Add Member</h1>
+        <hr>
         <form name="add-member" method ="POST" action="@routes.MemberController.addMember">
             <table>
                 <tr>
-                    <td><label>First Name:</label></td>
-                    <td><input name="firstName" /></td>
-                    <td><label>Last Name:</label></td>
-                    <td><input name="lastName" /></td>
+                    <th>First Name</th>
+                    <th>Last Name</th>
                 </tr>
                 <tr>
-                    <td><label>Email:</label></td>
-                    <td><input name="email" /></td>
-                    <td><label>Phone:</label></td>
-                    <td><input name="phone" /></td>
+                    <td><input class="form-control" name="firstName" /></td>
+                    <td><input class="form-control" name="lastName" /></td>
+                </tr>
+
+                <tr>
+                    <th>Email</th>
+                    <th>Phone</th>
                 </tr>
                 <tr>
-                    <td><label>Company:</label></td>
-                    <td><input name="company" /></td>
-                    <td><label>Job Title:</label></td>
-                    <td><input name="job" /></td>
+                    <td><input class="form-control" name="email" /></td>
+                    <td><input class="form-control" name="phone" /></td>
+                </tr>
+
+                <tr>
+                    <th>Company</th>
+                    <th>Job Title</th>
                 </tr>
                 <tr>
-                    <td><label>Date Joined:</label></td>
-                    <td><input name="joinDate" /></td>
-                    <td><label>Chapter:</label></td>
+                    <td><input class="form-control" name="company" /></td>
+                    <td><input class="form-control" name="job" /></td>
+                </tr>
+
+
+                <tr>
+                    <th>Date Joined</th>
+                    <th>Chapter</th>
+                </tr>
+                <tr>
+
+
+                    <td><input data-provide="datepicker" class="form-control datepicker" name="joinDate" placeholder=" YYYY-MM-DD"/></td>
                     <td>
-                        <select name="chapter">
+                        <select class="form-control" name="chapter">
                             @for(chapter <- chapters){
                             <option value="@chapter.getID">@chapter.getName</option>
                             }
                         </select>
                     </td>
                 </tr>
+
                 <tr>
-                    <td><label>Volunteer:</label></td>
+                    <th>Volunteer</th>
+                </tr>
+                <tr>
                     <td>
-                        <input type="radio" name="volunteer" value="1"/> Yes
-                        <input type="radio" name="volunteer" value="0"/> No
+                        <select class="form-control" name="volunteer">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
                     </td>
                 </tr>
             </table>
-            <button>Submit</button>
+            <button class="btn btn-success">Submit</button>
         </form>
     </div>
+    <script src="assets/javascripts/main.js"></script>
 </body>
 </html>

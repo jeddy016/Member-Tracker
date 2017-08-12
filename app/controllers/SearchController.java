@@ -27,21 +27,15 @@ public class SearchController extends Controller
     }
 
     @Transactional
-    public Result applyFilters()
-    {
-        return ok();
-    }
-
-    @Transactional
     public Result search()
     {
         DynamicForm form = formFactory.form().bindFromRequest();
         List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
 
-        String query;
-
         String applyFilters = form.get("apply-filters");
         String searchInput = form.get("input");
+
+        String query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput ORDER BY last_name";
 
         if(applyFilters.equals("yes"))
         {
@@ -55,21 +49,20 @@ public class SearchController extends Controller
             filters.put("volunteer", volunteerFilter);
             filters.put("date", dateFilter);
 
-            query = filteredSearch(filters);
-        }
-        else
-        {
-            query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput ORDER BY last_name";
+            query = applyFilters(filters);
         }
 
         @SuppressWarnings("unchecked")
-        List<MemberDetail> members = jpaApi.em().createNativeQuery(query, MemberDetail.class).setParameter("searchInput", "%" + searchInput + "%").getResultList();
+        List<MemberDetail> members = jpaApi.em()
+                .createNativeQuery(query, MemberDetail.class)
+                .setParameter("searchInput", "%" + searchInput + "%")
+                .getResultList();
 
         return ok(views.html.index.render(members, chapters));
     }
 
     @Transactional
-    private String filteredSearch(Map<String, String> filters)
+    private String applyFilters(Map<String, String> filters)
     {
         StringBuilder query = new StringBuilder("SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE (first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput)");
 

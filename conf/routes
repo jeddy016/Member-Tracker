@@ -3,8 +3,11 @@ GET     /                           controllers.BaseController.index
 
 GET     /addMember                  controllers.MemberController.renderAddMember
 POST    /addMember                  controllers.MemberController.addMember
+GET     /editMember/:id             controllers.MemberController.renderEditMember(id:Integer)
+GET     /editMember/:id             controllers.MemberController.editMember(id:Integer)
 
-POST    /applyFilters               controllers.SearchController.applyFilters
+GET     /chapters                   controllers.ChapterController.index
+
 GET     /search                     controllers.SearchController.search
 
 # Map static resources from the /public folder to the /assets URL path

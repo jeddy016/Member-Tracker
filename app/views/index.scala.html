@@ -1,7 +1,5 @@
 @(members : List[MemberDetail], chapters: List[Chapter])
 
-<!--TODO: Make member names click-able, send to edit user page-->
-
 <html>
 <head>
     <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
@@ -11,14 +9,11 @@
 </head>
 <body>
 
-    <div class="header">
-    </div>
-
     <div class ="sidebar">
         <a href="http://www.winwoman.org"><img class="logo" src="/assets/images/win-logo.png" /></a>
         <ul class="menu">
             <a class="menu-item" href="@routes.MemberController.renderAddMember"><li>Add Member</li></a>
-            <a class="menu-item" href="@routes.MemberController.renderAddMember"><li>Chapters</li></a>
+            <a class="menu-item" href="@routes.ChapterController.index"><li>Chapters</li></a>
         </ul>
     </div>
 
@@ -33,12 +28,10 @@
                     <input class="search-input" name="input" placeholder="eg: name, company, job title"/>
                 </div>
 
-                <!--<a href="@routes.BaseController.index" class="btn btn-danger reset-link">Reset</a>-->
-
                 <input id="filters-flag" type="hidden" value="no" name="apply-filters">
                 <label id="filters-select">Filters</label>
-                <button class="btn btn-success" form="search-form">Submit</button>
 
+                <button class="btn btn-success" form="search-form">Submit</button>
 
                 <div class="filter-container">
                     <table class="filter-table">
@@ -74,7 +67,7 @@
                 </div>
             </form>
         </div>
-
+        <hr>
         <table>
             <tr>
                 <th>Name</th>
@@ -89,7 +82,7 @@
         @if(members.size > 0){
             @for(member <- members){
                 <tr class="members-row">
-                    <td>@member.getFullName</td>
+                    <td><a href="@routes.MemberController.renderEditMember(member.getID)">@member.getFullName</a></td>
                     <td><a href="mailto:@member.getEmail">@member.getEmail</a></td>
                     <td>@member.getPhone</td>
                     <td>@member.getChapter</td>

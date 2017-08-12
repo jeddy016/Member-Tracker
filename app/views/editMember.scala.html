@@ -1,0 +1,66 @@
+@(member : MemberDetail, chapters: List[Chapter])
+
+<html>
+<head>
+    <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/stylesheets/addMember.css" />
+    <script src= "https://use.fontawesome.com/3d943843e1.js"></script>
+    <script src="/assets/lib/jquery/jquery.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <h1>Edit Member</h1>
+        <form name="add-member" method ="POST" action="@routes.MemberController.editMember(member.getID)">
+            <table>
+                <tr>
+                    <td><label>First Name:</label></td>
+                    <td><input class="form-control" name="firstName" value="@member.getFirstName"/></td>
+                    <td><label>Last Name:</label></td>
+                    <td><input class="form-control" name="lastName" value="@member.getLastName"/></td>
+                </tr>
+                <tr>
+                    <td><label>Email:</label></td>
+                    <td><input class="form-control" name="email" value="@member.getEmail"/></td>
+                    <td><label>Phone:</label></td>
+                    <td><input class="form-control" name="phone" value="@member.getPhone"/></td>
+                </tr>
+                <tr>
+                    <td><label>Company:</label></td>
+                    <td><input class="form-control" name="company" value="@member.getCompany"/></td>
+                    <td><label>Job Title:</label></td>
+                    <td><input class="form-control" name="job" value="@member.getJobTitle"/></td>
+                </tr>
+                <tr>
+                    <td><label>Date Joined:</label></td>
+                    <td><input class="form-control" name="joinDate" value="@member.getDateJoined"/></td>
+                    <td><label>Chapter:</label></td>
+                    <td>
+                        <select class="form-control" name="chapter">
+                            @for(chapter <- chapters){
+                                @if(chapter.getName != member.getChapter){
+                                    <option value="@chapter.getID">@chapter.getName</option>
+                                }else{
+                                    <option value="@chapter.getID" selected>@chapter.getName</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Volunteer:</label></td>
+                    <td>
+                        @if(member.getVolunteer == "Yes"){
+                            <input type="radio" name="volunteer" value="1" checked/> Yes
+                            <input type="radio" name="volunteer" value="0"/> No
+                        }else{
+                            <input type="radio" name="volunteer" value="1" /> Yes
+                            <input type="radio" name="volunteer" value="0" checked/> No
+                        }
+                    </td>
+                </tr>
+            </table>
+            <button class="btn btn-success">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
