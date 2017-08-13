@@ -3,6 +3,7 @@ package controllers;
 import models.Chapter;
 import models.Member;
 import models.MemberDetail;
+import models.MemberForm;
 import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.db.jpa.JPAApi;
@@ -29,40 +30,49 @@ public class MemberController extends Controller
     public Result renderAddMember()
     {
         List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
-
-        return ok(views.html.addMember.render(chapters));
+        List<String> errors = new ArrayList<>();
+        return ok(views.html.addMember.render(chapters, errors));
     }
 
     @Transactional
     public Result addMember()
     {
         DynamicForm form = formFactory.form().bindFromRequest();
+        List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
 
-        String firstName = form.get("firstName");
-        String lastName = form.get("lastName");
-        String email = form.get("email");
-        String phone = form.get("phone");
-        String company = form.get("company");
-        String job = form.get("job");
-        String joinDate = form.get("joinDate");
-        int chapter = Integer.parseInt(form.get("chapter"));
-        String volunteer = form.get("volunteer");
+        MemberForm memberForm = new MemberForm();
 
-        Member member = new Member();
+        memberForm.setFirstName(form.get("firstName"));
+        memberForm.setLastName(form.get("lastName"));
+        memberForm.setEmail(form.get("email"));
+        memberForm.setPhone(form.get("phone"));
+        memberForm.setCompany(form.get("company"));
+        memberForm.setJobTitle(form.get("job"));
+        memberForm.setDateJoined(form.get("joinDate"));
 
-        member.setFirstName(firstName);
-        member.setLastName(lastName);
-        member.setEmail(email);
-        member.setPhone(Long.parseLong(phone));
-        member.setEmail(email);
-        member.setJobTitleID(1);
-        member.setCompanyID(1);
-        member.setChapterID(chapter);
-        //TODO: check if job/company exists then set accordingly
-        //TODO: format join date as date and set accordingly
-        member.setVolunteer(Integer.parseInt(volunteer));
+        if(memberForm.isValid())
+        {
+            int chapter = Integer.parseInt(form.get("chapter"));
+            int volunteer = Integer.parseInt(form.get("volunteer"));
 
-        jpaApi.em().persist(member);
+            Member member = new Member();
+
+            member.setFirstName(memberForm.getFirstName());
+            member.setLastName(memberForm.getLastName());
+            member.setEmail(memberForm.getEmail());
+            member.setPhone(memberForm.getPhone());
+            member.setJobTitleID(1);
+            member.setCompanyID(1);
+            member.setDateJoined(memberForm.getDateJoined());
+            member.setChapterID(chapter);
+            member.setVolunteer(volunteer);
+
+            jpaApi.em().persist(member);
+        }
+        else
+        {
+            return ok(views.html.addMember.render(chapters, memberForm.showErrors()));
+        }
 
         return redirect(routes.BaseController.index());
     }

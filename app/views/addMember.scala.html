@@ -1,4 +1,4 @@
-@(chapters: List[Chapter])
+@(chapters: List[Chapter], errors: List[String])
 
 <html>
 <head>
@@ -21,43 +21,32 @@
     <div class="content-container">
         <h1>Add Member</h1>
         <hr>
+        @for(error <- errors){
+            <p class="error">@error</p>
+        }
         <form name="add-member" method ="POST" action="@routes.MemberController.addMember">
             <table>
                 <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>*First Name</th>
+                    <th>*Last Name</th>
                 </tr>
                 <tr>
                     <td><input class="form-control" name="firstName" /></td>
                     <td><input class="form-control" name="lastName" /></td>
                 </tr>
-
                 <tr>
-                    <th>Email</th>
+                    <th>*Email</th>
                     <th>Phone</th>
                 </tr>
                 <tr>
                     <td><input class="form-control" name="email" /></td>
-                    <td><input class="form-control" name="phone" /></td>
-                </tr>
-
-                <tr>
-                    <th>Company</th>
-                    <th>Job Title</th>
+                    <td><input class="form-control" name="phone" placeholder="XXX-XXX-XXXX"/></td>
                 </tr>
                 <tr>
-                    <td><input class="form-control" name="company" /></td>
-                    <td><input class="form-control" name="job" /></td>
-                </tr>
-
-
-                <tr>
-                    <th>Date Joined</th>
+                    <th>*Date Joined</th>
                     <th>Chapter</th>
                 </tr>
                 <tr>
-
-
                     <td><input data-provide="datepicker" class="form-control datepicker" name="joinDate" placeholder=" YYYY-MM-DD"/></td>
                     <td>
                         <select class="form-control" name="chapter">
@@ -67,7 +56,14 @@
                         </select>
                     </td>
                 </tr>
-
+                <tr>
+                    <th>Company</th>
+                    <th>Job Title</th>
+                </tr>
+                <tr>
+                    <td><input class="form-control" name="company" /></td>
+                    <td><input class="form-control" name="job" /></td>
+                </tr>
                 <tr>
                     <th>Volunteer</th>
                 </tr>

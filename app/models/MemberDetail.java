@@ -85,20 +85,27 @@ public class MemberDetail
 
     public String getPhone()
     {
-        String[] phoneArr = phone.split("");
         StringBuilder formattedPhone = new StringBuilder();
 
-        for(int i= 0; i < phoneArr.length; i++)
+        if(phone.length() > 0)
         {
-            if(i == 0) formattedPhone.append("(");
+            String[] phoneArr = phone.split("");
 
-            if(i == 3) formattedPhone.append(") ");
+            for (int i = 0; i < phoneArr.length; i++)
+            {
+                if (i == 0) formattedPhone.append("(");
 
-            if(i == 6) formattedPhone.append("-");
+                if (i == 3) formattedPhone.append(") ");
 
-            formattedPhone.append(phoneArr[i]);
+                if (i == 6) formattedPhone.append("-");
+
+                formattedPhone.append(phoneArr[i]);
+            }
         }
-
+        else
+        {
+            formattedPhone.append("N/A");
+        }
         return formattedPhone.toString();
     }
 

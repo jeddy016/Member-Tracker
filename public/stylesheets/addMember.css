@@ -75,6 +75,10 @@ li:hover {
     padding: 2% 3% 2% 3%;
 }
 
+.error {
+    color: red;
+}
+
 .btn {
     width: 92%;
     margin-top: 7%;

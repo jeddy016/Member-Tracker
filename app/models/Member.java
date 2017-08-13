@@ -22,7 +22,7 @@ public class Member
     private String email;
 
     @Column(name="phone")
-    private long phone;
+    private String phone;
 
     @Column(name="date_joined")
     private LocalDate dateJoined;
@@ -79,12 +79,12 @@ public class Member
         this.email = email;
     }
 
-    public long getPhone()
+    public String getPhone()
     {
         return phone;
     }
 
-    public void setPhone(long phone)
+    public void setPhone(String phone)
     {
         this.phone = phone;
     }
