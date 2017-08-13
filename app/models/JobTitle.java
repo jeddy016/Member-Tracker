@@ -8,10 +8,10 @@ public class JobTitle
 {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column
+    @Column(name="job_title_id")
     private int id;
 
-    @Column
+    @Column(name="name")
     private String name;
 
     public int getId()

@@ -8,11 +8,11 @@ public class Company
 {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column
+    @Column(name="company_id")
     private int id;
 
-    @Column
-    private int name;
+    @Column(name="name")
+    private String name;
 
     public int getId()
     {
@@ -24,12 +24,12 @@ public class Company
         this.id = id;
     }
 
-    public int getName()
+    public String getName()
     {
         return name;
     }
 
-    public void setName(int name)
+    public void setName(String name)
     {
         this.name = name;
     }

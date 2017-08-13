@@ -10,8 +10,10 @@ libraryDependencies += javaJpa
 libraryDependencies += javaJdbc
 libraryDependencies += cache
 libraryDependencies += javaWs
+libraryDependencies += "org.webjars" %% "webjars-play" % "2.5.0"
 libraryDependencies += "org.hibernate" % "hibernate-core" % "5.2.5.Final"
 libraryDependencies += "org.mariadb.jdbc" % "mariadb-java-client" % "1.5.7"
 libraryDependencies += "org.webjars" % "bootstrap" % "3.3.7-1"
 libraryDependencies += "org.webjars" % "jquery" % "3.2.1"
 libraryDependencies += "org.webjars" % "bootstrap-datepicker" % "1.7.1"
+

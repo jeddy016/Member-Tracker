@@ -1,9 +1,6 @@
 package controllers;
 
-import models.Chapter;
-import models.Member;
-import models.MemberDetail;
-import models.MemberForm;
+import models.*;
 import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.db.jpa.JPAApi;
@@ -54,6 +51,8 @@ public class MemberController extends Controller
         {
             int chapter = Integer.parseInt(form.get("chapter"));
             int volunteer = Integer.parseInt(form.get("volunteer"));
+            int companyID = getCompanyID(memberForm.getCompany());
+            int jobTitleID = getJobTitleID(memberForm.getJobTitle());
 
             Member member = new Member();
 
@@ -61,8 +60,8 @@ public class MemberController extends Controller
             member.setLastName(memberForm.getLastName());
             member.setEmail(memberForm.getEmail());
             member.setPhone(memberForm.getPhone());
-            member.setJobTitleID(1);
-            member.setCompanyID(1);
+            member.setJobTitleID(jobTitleID);
+            member.setCompanyID(companyID);
             member.setDateJoined(memberForm.getDateJoined());
             member.setChapterID(chapter);
             member.setVolunteer(volunteer);
@@ -75,6 +74,54 @@ public class MemberController extends Controller
         }
 
         return redirect(routes.BaseController.index());
+    }
+
+    @Transactional
+    private int getCompanyID(String name)
+    {
+        Integer id = -1;
+
+        if(name.length() > 0)
+        {
+            try
+            {
+                Company company = (Company) jpaApi.em().createNativeQuery("SELECT * FROM company WHERE name LIKE :name", Company.class).setParameter("name", name).setMaxResults(1).getSingleResult();
+
+                id = company.getId();
+
+            } catch (Exception e)
+            {
+                jpaApi.em().createNativeQuery("INSERT INTO company(name) VALUES(:name)").setParameter("name", name).executeUpdate();
+
+                id = (Integer) jpaApi.em().createNativeQuery("SELECT company_id FROM company WHERE name LIKE :name").setParameter("name", name).getSingleResult();
+            }
+        }
+
+        return id;
+    }
+
+    @Transactional
+    private int getJobTitleID(String name)
+    {
+        Integer id = -1;
+
+        if(name.length() > 0)
+        {
+            try
+            {
+                JobTitle title = (JobTitle) jpaApi.em().createNativeQuery("SELECT * FROM job_title WHERE name LIKE :name", JobTitle.class).setParameter("name", name).setMaxResults(1).getSingleResult();
+
+                id = title.getId();
+
+            } catch (Exception e)
+            {
+                jpaApi.em().createNativeQuery("INSERT INTO job_title(name) VALUES(:name)").setParameter("name", name).executeUpdate();
+
+                id = (Integer) jpaApi.em().createNativeQuery("SELECT job_title_id FROM job_title WHERE name LIKE :name").setParameter("name", name).getSingleResult();
+            }
+        }
+
+        return id;
     }
 
     @Transactional

@@ -19,8 +19,6 @@ public class MemberForm
     private String dateJoined;
     private List<String> errors = new ArrayList<>();
 
-    private final int COMPANY_MAX_LENGTH = 80;
-    private final int JOB_MAX_LENGTH = 80;
 
     public void setFirstName(String firstName)
     {
@@ -74,6 +72,8 @@ public class MemberForm
 
     public String getPhone()
     {
+        phone = phone.replaceAll( "[^\\d]", "" );
+
         return phone;
     }
 
@@ -96,7 +96,8 @@ public class MemberForm
     {
         return nameValid(firstName) && nameValid(lastName)
                 && emailValid(email) && phoneValid(phone)
-                && dateValid(dateJoined);
+                && dateValid(dateJoined) && companyValid(company)
+                && jobTitleValid(jobTitle);
     }
 
     private boolean nameValid(String name)
@@ -146,15 +147,16 @@ public class MemberForm
     private boolean phoneValid(String phone)
     {
         boolean valid = true;
-        final int PHONE_MAX_LENGTH = 12;
-        final int PHONE_MIN_LENGTH = 10;
+        final int PHONE_MAX_LENGTH = 10;
+
+        phone = phone.replaceAll( "[^\\d]", "" );
 
         if(phone.length() > 0)
         {
-            if (phone.length() < PHONE_MIN_LENGTH || phone.length() > PHONE_MAX_LENGTH)
+            if (phone.length() != 10)
             {
                 valid = false;
-                errors.add("Phone number must include area code and be in format XXX-XXX-XXXX or XXXXXXXXXX");
+                errors.add("Phone number must contain 10 numbers, to include area code");
             }
         }
         return valid;
@@ -172,6 +174,34 @@ public class MemberForm
         }catch(Exception e)
         {
             errors.add("Date must be formatted as YYYY-MM-DD");
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    private boolean companyValid(String company)
+    {
+        final int COMPANY_MAX_LENGTH = 80;
+        boolean valid = true;
+
+        if(company.length() > COMPANY_MAX_LENGTH)
+        {
+            errors.add("Company and Job Title cannot exceed 80 characters");
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    private boolean jobTitleValid(String job)
+    {
+        final int JOB_MAX_LENGTH = 80;
+        boolean valid = true;
+
+        if(job.length() > JOB_MAX_LENGTH)
+        {
+            errors.add("Company and Job Title cannot exceed 80 characters");
             valid = false;
         }
 
