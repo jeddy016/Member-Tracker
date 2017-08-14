@@ -35,7 +35,6 @@ public class MemberController extends Controller
     public Result addMember()
     {
         DynamicForm form = formFactory.form().bindFromRequest();
-        List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
 
         MemberForm memberForm = new MemberForm();
 
@@ -65,13 +64,95 @@ public class MemberController extends Controller
             member.setDateJoined(memberForm.getDateJoined());
             member.setChapterID(chapter);
             member.setVolunteer(volunteer);
+            member.setActive(1);
 
             jpaApi.em().persist(member);
         }
         else
         {
-            return ok(views.html.addMember.render(chapters, memberForm.showErrors()));
+            List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
+            List<String> errors = memberForm.showErrors();
+
+            return ok(views.html.addMember.render(chapters, errors));
         }
+        return redirect(routes.BaseController.index());
+    }
+
+    @Transactional
+    public Result renderEditMember(Integer id)
+    {
+        String query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, m.active, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE m.member_id = :id";
+
+        MemberDetail member = (MemberDetail) jpaApi.em()
+                .createNativeQuery(query, MemberDetail.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+        List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
+        List<String> errors = new ArrayList<>();
+
+        return ok(views.html.editMember.render(member, chapters, errors));
+    }
+
+    @Transactional
+    public Result editMember(Integer id)
+    {
+        DynamicForm form = formFactory.form().bindFromRequest();
+
+        MemberForm memberForm = new MemberForm();
+
+        memberForm.setFirstName(form.get("firstName"));
+        memberForm.setLastName(form.get("lastName"));
+        memberForm.setEmail(form.get("email"));
+        memberForm.setPhone(form.get("phone"));
+        memberForm.setCompany(form.get("company"));
+        memberForm.setJobTitle(form.get("job"));
+        memberForm.setDateJoined(form.get("joinDate"));
+
+        if(memberForm.isValid())
+        {
+            int chapter = Integer.parseInt(form.get("chapter"));
+            int volunteer = Integer.parseInt(form.get("volunteer"));
+            int companyID = getCompanyID(memberForm.getCompany());
+            int jobTitleID = getJobTitleID(memberForm.getJobTitle());
+
+            jpaApi.em().createQuery("UPDATE Member SET firstName = :first, lastName = :last, email = :email, phone = :phone, companyID = :companyID, jobTitleID = :jobTitleID, volunteer = :volunteer, chapterID = :chapter, dateJoined = :dateJoined WHERE id = :id")
+                    .setParameter("first", memberForm.getFirstName())
+                    .setParameter("last", memberForm.getLastName())
+                    .setParameter("email", memberForm.getEmail())
+                    .setParameter("phone", memberForm.getPhone())
+                    .setParameter("companyID", companyID)
+                    .setParameter("jobTitleID",jobTitleID)
+                    .setParameter("volunteer", volunteer)
+                    .setParameter("chapter", chapter)
+                    .setParameter("dateJoined", memberForm.getDateJoined())
+                    .setParameter("id", id)
+                    .executeUpdate();
+        }
+        else
+        {
+            String query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE m.member_id = :id";
+
+            MemberDetail member = (MemberDetail) jpaApi.em()
+                    .createNativeQuery(query, MemberDetail.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+
+            List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
+            List<String> errors = memberForm.showErrors();
+
+            return ok(views.html.editMember.render(member, chapters, errors));
+        }
+
+        return redirect(routes.BaseController.index());
+    }
+
+    @Transactional
+    public Result deleteMember(Integer id)
+    {
+        String query = "UPDATE member SET active = 0 WHERE member_id = :id";
+
+        jpaApi.em().createNativeQuery(query).setParameter("id", id).executeUpdate();
 
         return redirect(routes.BaseController.index());
     }
@@ -122,27 +203,5 @@ public class MemberController extends Controller
         }
 
         return id;
-    }
-
-    @Transactional
-    public Result renderEditMember(Integer id)
-    {
-        String query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE m.member_id = :id";
-
-        MemberDetail member = (MemberDetail) jpaApi.em()
-                .createNativeQuery(query, MemberDetail.class)
-                .setParameter("id", id)
-                .getSingleResult();
-
-        List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
-
-        return ok(views.html.editMember.render(member, chapters));
-    }
-
-    @Transactional
-    public Result editMember(Integer id)
-    {
-
-        return ok();
     }
 }

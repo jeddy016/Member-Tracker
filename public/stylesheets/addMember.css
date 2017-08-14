@@ -79,7 +79,19 @@ li:hover {
     color: red;
 }
 
-.btn {
-    width: 92%;
+.btn-success {
+    width: 40%;
     margin-top: 7%;
+    margin-left: 6%;
+}
+
+.btn-danger {
+    width: 40%;
+    margin-top: 7%;
+}
+
+.btn-default {
+    width: 81%;
+    margin-top: 1%;
+    margin-left: 6%;
 }

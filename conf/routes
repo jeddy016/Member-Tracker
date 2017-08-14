@@ -4,7 +4,8 @@ GET     /                           controllers.BaseController.index
 GET     /addMember                  controllers.MemberController.renderAddMember
 POST    /addMember                  controllers.MemberController.addMember
 GET     /editMember/:id             controllers.MemberController.renderEditMember(id:Integer)
-GET     /editMember/:id             controllers.MemberController.editMember(id:Integer)
+POST    /editMember/:id             controllers.MemberController.editMember(id:Integer)
+GET    /deleteMember/:id           controllers.MemberController.deleteMember(id:Integer)
 
 GET     /chapters                   controllers.ChapterController.index
 

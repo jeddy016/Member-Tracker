@@ -1,5 +1,7 @@
 package models;
 
+import play.Logger;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -18,7 +20,6 @@ public class MemberForm
     private String jobTitle;
     private String dateJoined;
     private List<String> errors = new ArrayList<>();
-
 
     public void setFirstName(String firstName)
     {
@@ -94,10 +95,54 @@ public class MemberForm
 
     public boolean isValid()
     {
-        return nameValid(firstName) && nameValid(lastName)
-                && emailValid(email) && phoneValid(phone)
-                && dateValid(dateJoined) && companyValid(company)
-                && jobTitleValid(jobTitle);
+        boolean valid = true;
+
+        if(!formComplete())
+        {
+            valid = false;
+        }
+        if(!nameValid(firstName))
+        {
+            valid = false;
+        }
+        if(!nameValid(lastName))
+        {
+            valid = false;
+        }
+        if(!emailValid(email))
+        {
+            valid = false;
+        }
+        if(!phoneValid(phone))
+        {
+            valid = false;
+        }
+        if(!dateValid(dateJoined))
+        {
+            valid = false;
+        }
+        if (!companyValid(company))
+        {
+            valid = false;
+        }
+        if(!jobTitleValid(jobTitle))
+        {
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    private boolean formComplete()
+    {
+        boolean valid = true;
+
+        if(firstName.length() == 0 || lastName.length() == 0 || email.length() == 0 || dateJoined.length() == 0)
+        {
+            errors.add("Fields marked with * are required");
+            valid = false;
+        }
+        return valid;
     }
 
     private boolean nameValid(String name)
@@ -105,19 +150,12 @@ public class MemberForm
         boolean valid = true;
         final int NAME_MAX_LENGTH = 30;
 
-        if (name.length() != 0 && email.length() > 0)
+        if (name.length() > NAME_MAX_LENGTH)
         {
-            if (name.length() > NAME_MAX_LENGTH)
-            {
-                errors.add("Names cannot exceed 30 characters");
-                valid = false;
-            }
-        }
-        else
-        {
-            errors.add("Fields marked with * are required");
+            this.errors.add("Names cannot exceed 30 characters");
             valid = false;
         }
+
         return valid;
     }
 
@@ -171,7 +209,7 @@ public class MemberForm
         try
         {
             format.parse(date);
-        }catch(Exception e)
+        } catch (Exception e)
         {
             errors.add("Date must be formatted as YYYY-MM-DD");
             valid = false;

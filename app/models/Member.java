@@ -39,6 +39,9 @@ public class Member
     @Column(name="company_id")
     private int companyID;
 
+    @Column(name="active")
+    private int active;
+
     public int getId()
     {
         return id;
@@ -137,5 +140,20 @@ public class Member
     public void setCompanyID(int companyID)
     {
         this.companyID = companyID;
+    }
+
+    public int getVolunteer()
+    {
+        return volunteer;
+    }
+
+    public int getActive()
+    {
+        return active;
+    }
+
+    public void setActive(int active)
+    {
+        this.active = active;
     }
 }

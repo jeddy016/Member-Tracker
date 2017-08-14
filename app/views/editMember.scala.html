@@ -1,39 +1,60 @@
-@(member : MemberDetail, chapters: List[Chapter])
+@(member : MemberDetail, chapters: List[Chapter], errors: List[String])
 
 <html>
 <head>
     <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/stylesheets/addMember.css" />
+    <link rel="stylesheet" href="/assets/lib/bootstrap-datepicker/css/bootstrap-datepicker.css" />
     <script src= "https://use.fontawesome.com/3d943843e1.js"></script>
     <script src="/assets/lib/jquery/jquery.min.js"></script>
+    <script src="/assets/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 </head>
 <body>
-    <div class="wrapper">
+    <div class="sidebar">
+        <a href="http://www.winwoman.org"><img class="logo" src="/assets/images/win-logo.png" /></a>
+        <ul class="menu">
+            <a class="menu-item" href="@routes.BaseController.index"><li>Members</li></a>
+            <a class="menu-item" href="@routes.ChapterController.index"><li>Chapters</li></a>
+        </ul>
+    </div>
+    <div class="content-container">
         <h1>Edit Member</h1>
-        <form name="add-member" method ="POST" action="@routes.MemberController.editMember(member.getID)">
+        <hr>
+        @for(error <- errors){
+        <p class="error">@error</p>
+        }
+        <form id="edit-member" method ="POST" action="@routes.MemberController.editMember(member.getID)">
             <table>
                 <tr>
-                    <td><label>First Name:</label></td>
+                    <th><label>*First Name</label></th>
+                    <th><label>*Last Name</label></th>
+                </tr>
+                <tr>
                     <td><input class="form-control" name="firstName" value="@member.getFirstName"/></td>
-                    <td><label>Last Name:</label></td>
                     <td><input class="form-control" name="lastName" value="@member.getLastName"/></td>
                 </tr>
                 <tr>
-                    <td><label>Email:</label></td>
+                    <th><label>*Email</label></th>
+                    <th><label>Phone</label></th>
+                </tr>
+                <tr>
                     <td><input class="form-control" name="email" value="@member.getEmail"/></td>
-                    <td><label>Phone:</label></td>
                     <td><input class="form-control" name="phone" value="@member.getPhone"/></td>
                 </tr>
                 <tr>
-                    <td><label>Company:</label></td>
+                    <th><label>Company</label></th>
+                    <th><label>Job Title</label></th>
+                </tr>
+                <tr>
                     <td><input class="form-control" name="company" value="@member.getCompany"/></td>
-                    <td><label>Job Title:</label></td>
                     <td><input class="form-control" name="job" value="@member.getJobTitle"/></td>
                 </tr>
                 <tr>
-                    <td><label>Date Joined:</label></td>
-                    <td><input class="form-control" name="joinDate" value="@member.getDateJoined"/></td>
-                    <td><label>Chapter:</label></td>
+                    <th><label>*Date Joined</label></th>
+                    <th><label>Chapter</label></th>
+                </tr>
+                <tr>
+                    <td><input data-provide="datepicker" class="form-control datepicker" name="joinDate" value="@member.getDateJoined"/></td>
                     <td>
                         <select class="form-control" name="chapter">
                             @for(chapter <- chapters){
@@ -46,21 +67,26 @@
                         </select>
                     </td>
                 </tr>
+                <tr><th>Volunteer</th></tr>
                 <tr>
-                    <td><label>Volunteer:</label></td>
                     <td>
-                        @if(member.getVolunteer == "Yes"){
-                            <input type="radio" name="volunteer" value="1" checked/> Yes
-                            <input type="radio" name="volunteer" value="0"/> No
-                        }else{
-                            <input type="radio" name="volunteer" value="1" /> Yes
-                            <input type="radio" name="volunteer" value="0" checked/> No
-                        }
+                        <select class="form-control" name="volunteer">
+                            @if(member.getVolunteer == "Yes"){
+                                <option value="0">No</option>
+                                <option value="1" selected>Yes</option>
+                            }else{
+                                <option value="0" selected>No</option>
+                                <option value="1">Yes</option>
+                            }
+                        </select>
                     </td>
                 </tr>
             </table>
-            <button class="btn btn-success">Submit</button>
+            <button class="btn btn-success" type="submit" form="edit-member">Submit</button>
+            <a class="btn btn-danger" href="@routes.MemberController.deleteMember(member.getID)">Delete</a>
+            <a class="btn btn-default" href="@routes.BaseController.index">Cancel</a>
         </form>
     </div>
+    <script src="/assets/javascripts/main.js"></script>
 </body>
 </html>

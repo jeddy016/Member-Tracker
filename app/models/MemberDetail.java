@@ -38,6 +38,9 @@ public class MemberDetail
     @Column
     private String company;
 
+    @Column
+    private int active;
+
     public int getID()
     {
         return id;
@@ -162,5 +165,15 @@ public class MemberDetail
     public void setCompany(String company)
     {
         this.company = company;
+    }
+
+    public int getActive()
+    {
+        return active;
+    }
+
+    public void setActive(int active)
+    {
+        this.active = active;
     }
 }
