@@ -35,7 +35,7 @@ public class SearchController extends Controller
         String applyFilters = form.get("apply-filters");
         String searchInput = form.get("input");
 
-        String query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput ORDER BY last_name";
+        String query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle, m.active FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput ORDER BY last_name";
 
         if(applyFilters.equals("yes"))
         {
@@ -64,7 +64,7 @@ public class SearchController extends Controller
     @Transactional
     private String applyFilters(Map<String, String> filters)
     {
-        StringBuilder query = new StringBuilder("SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE (first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput)");
+        StringBuilder query = new StringBuilder("SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, m.active, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE (first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput)");
 
         for(Map.Entry<String, String> filter : filters.entrySet())
         {
@@ -93,7 +93,7 @@ public class SearchController extends Controller
                 {
                     if(input.equals("0"))
                     {
-                        query.append(" AND TIMESTAMPDIFF(YEAR, m.date_joined, CURDATE()) <= 1 ");
+                        query.append(" AND TIMESTAMPDIFF(YEAR, m.date_joined, CURDATE()) < 1 ");
                     }
                     if(input.equals("1"))
                     {

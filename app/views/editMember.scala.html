@@ -3,7 +3,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/assets/stylesheets/addMember.css" />
+    <link rel="stylesheet" href="/assets/stylesheets/editMember.css" />
     <link rel="stylesheet" href="/assets/lib/bootstrap-datepicker/css/bootstrap-datepicker.css" />
     <script src= "https://use.fontawesome.com/3d943843e1.js"></script>
     <script src="/assets/lib/jquery/jquery.min.js"></script>
@@ -82,7 +82,7 @@
                     </td>
                 </tr>
             </table>
-            <button class="btn btn-success" type="submit" form="edit-member">Submit</button>
+            <button class="btn btn-success" type="submit" form="edit-member">Update</button>
             <a class="btn btn-danger" href="@routes.MemberController.deleteMember(member.getID)">Delete</a>
             <a class="btn btn-default" href="@routes.BaseController.index">Cancel</a>
         </form>

@@ -20,6 +20,15 @@ td, th {
     padding: .5%;
 }
 
+a {
+    text-decoration: underline;
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
 label {
     margin: 0;
 }
@@ -62,18 +71,19 @@ li:hover {
     background: #FF3333;
 }
 
-.menu-item {
+.menu-item, .menu-item:focus, .menu-item:visited {
     color: white;
     font-size: 1.6em;
+    text-decoration: none;
 }
 
 .menu-item:hover {
-    text-decoration: none;
     color: white;
 }
 
 .title {
     margin-top: 0;
+    color: #23527C;
 }
 
 .search-container {
@@ -87,6 +97,9 @@ li:hover {
     border: 1px solid #F1F1F1;
     padding: .75%;
     background: white;
+    -webkit-box-shadow: -2px 4px 10px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: -2px 4px 10px -1px rgba(0,0,0,0.75);
+    box-shadow: -2px 4px 10px -1px rgba(0,0,0,0.75);
 }
 
 .search-input {
@@ -99,14 +112,14 @@ li:hover {
     padding: 1%;
     border-radius: 5px 0 0 0;
     font-size: 1.3em;
-    color: #80C7F2;
+    color: #23527C;
     border-right: 1px solid #4C4C4C;
     text-decoration: underline;
 }
 
 #filters-select:hover {
     cursor: pointer;
-    text-decoration: none !important;
+    text-decoration: none;
 }
 
 .filters-selected {
