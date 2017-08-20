@@ -26,41 +26,6 @@ public class MemberFormHelper
     private int volunteer;
     private List<String> errors = new ArrayList<>();
 
-    public void setFirstName(String firstName)
-    {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName)
-    {
-        this.lastName = lastName;
-    }
-
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
-
-    public void setPhone(String phone)
-    {
-        this.phone = phone;
-    }
-
-    public void setCompany(String company)
-    {
-        this.company = company;
-    }
-
-    public void setJobTitle(String jobTitle)
-    {
-        this.jobTitle = jobTitle;
-    }
-
-    public void setDateJoined(String dateJoined)
-    {
-        this.dateJoined = dateJoined;
-    }
-
     public void setJobTitleID(int jobTitleID)
     {
         this.jobTitleID = jobTitleID;
@@ -88,9 +53,22 @@ public class MemberFormHelper
 
     public String getPhone()
     {
-        phone = phone.replaceAll( "[^\\d]", "" );
+        return phone.replaceAll( "[^\\d]", "" );
+    }
 
-        return phone;
+    public String getCompany()
+    {
+        return company;
+    }
+
+    public String getJobTitle()
+    {
+        return jobTitle;
+    }
+
+    public LocalDate getDateJoined()
+    {
+        return LocalDate.parse(dateJoined);
     }
 
     public int getChapter()
@@ -113,57 +91,18 @@ public class MemberFormHelper
         return volunteer;
     }
 
-    public String getCompany()
-    {
-        return company;
-    }
-
-    public String getJobTitle()
-    {
-        return jobTitle;
-    }
-
-    public LocalDate getDateJoined()
-    {
-        return LocalDate.parse(dateJoined);
-    }
-
     public boolean isValid()
     {
         boolean valid = true;
 
-        if(!formComplete())
-        {
-            valid = false;
-        }
-        if(!nameValid(firstName))
-        {
-            valid = false;
-        }
-        if(!nameValid(lastName))
-        {
-            valid = false;
-        }
-        if(!emailValid(email))
-        {
-            valid = false;
-        }
-        if(!phoneValid(phone))
-        {
-            valid = false;
-        }
-        if(!dateValid(dateJoined))
-        {
-            valid = false;
-        }
-        if (!companyValid(company))
-        {
-            valid = false;
-        }
-        if(!jobTitleValid(jobTitle))
-        {
-            valid = false;
-        }
+        if(!formComplete()) valid = false;
+        if(!nameValid(firstName)) valid = false;
+        if(!nameValid(lastName)) valid = false;
+        if(!emailValid(email)) valid = false;
+        if(!phoneValid(phone)) valid = false;
+        if(!dateValid(dateJoined)) valid = false;
+        if(!companyValid(company)) valid = false;
+        if(!jobTitleValid(jobTitle)) valid = false;
 
         return valid;
     }

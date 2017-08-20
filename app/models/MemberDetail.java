@@ -46,29 +46,14 @@ public class MemberDetail
         return id;
     }
 
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
     public String getFirstName()
     {
         return firstName;
     }
 
-    public void setFirstName(String firstName)
-    {
-        this.firstName = firstName;
-    }
-
     public String getLastName()
     {
         return lastName;
-    }
-
-    public void setLastName(String lastName)
-    {
-        this.lastName = lastName;
     }
 
     public String getFullName()
@@ -79,11 +64,6 @@ public class MemberDetail
     public String getEmail()
     {
         return email;
-    }
-
-    public void setEmail(String email)
-    {
-        this.email = email;
     }
 
     public String getPhone()
@@ -112,19 +92,9 @@ public class MemberDetail
         return formattedPhone.toString();
     }
 
-    public void setPhone(String phone)
-    {
-        this.phone = phone;
-    }
-
     public String getDateJoined()
     {
         return dateJoined;
-    }
-
-    public void setDateJoined(String dateJoined)
-    {
-        this.dateJoined = dateJoined;
     }
 
     public String getVolunteer()
@@ -132,19 +102,9 @@ public class MemberDetail
         return volunteer.equals("0") ? "No" : "Yes";
     }
 
-    public void setVolunteer(String volunteer)
-    {
-        this.volunteer = volunteer;
-    }
-
     public String getChapter()
     {
         return chapter;
-    }
-
-    public void setChapter(String chapter)
-    {
-        this.chapter = chapter;
     }
 
     public String getJobTitle()
@@ -152,28 +112,9 @@ public class MemberDetail
         return jobTitle;
     }
 
-    public void setJobTitle(String jobTitle)
-    {
-        this.jobTitle = jobTitle;
-    }
-
     public String getCompany()
     {
         return company;
     }
 
-    public void setCompany(String company)
-    {
-        this.company = company;
-    }
-
-    public int getActive()
-    {
-        return active;
-    }
-
-    public void setActive(int active)
-    {
-        this.active = active;
-    }
 }

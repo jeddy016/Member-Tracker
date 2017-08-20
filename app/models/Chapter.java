@@ -22,11 +22,6 @@ public class Chapter
         return id;
     }
 
-    public void setID(int chapterID)
-    {
-        this.id = chapterID;
-    }
-
     public String getName()
     {
         return name;
