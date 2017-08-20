@@ -34,22 +34,16 @@ public class SearchController extends Controller
 
         String applyFilters = form.get("apply-filters");
         String searchInput = form.get("input");
-
-        String query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle, m.active FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput ORDER BY last_name";
+        String query;
 
         if(applyFilters.equals("yes"))
         {
-            String chapterFilter = form.get("chapter-filter");
-            String volunteerFilter = form.get("vol-filter");
-            String dateFilter = form.get("date-filter");
-
-            Map<String, String> filters = new HashMap<>();
-
-            filters.put("chapter", chapterFilter);
-            filters.put("volunteer", volunteerFilter);
-            filters.put("date", dateFilter);
-
+            Map<String, String> filters = parseFilters(form);
             query = applyFilters(filters);
+        }
+        else
+        {
+            query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle, m.active FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE m.active = 1 AND  (first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput) ORDER BY last_name";
         }
 
         @SuppressWarnings("unchecked")
@@ -61,45 +55,52 @@ public class SearchController extends Controller
         return ok(views.html.index.render(members, chapters));
     }
 
+    private Map<String, String> parseFilters(DynamicForm form)
+    {
+        String chapterFilter = form.get("chapter-filter");
+        String volunteerFilter = form.get("vol-filter");
+        String dateFilter = form.get("date-filter");
+
+        Map<String, String> filters = new HashMap<>();
+        filters.put("chapter", chapterFilter);
+        filters.put("volunteer", volunteerFilter);
+        filters.put("date", dateFilter);
+
+        return filters;
+    }
+
     @Transactional
     private String applyFilters(Map<String, String> filters)
     {
-        StringBuilder query = new StringBuilder("SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, m.active, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE (first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput)");
+        StringBuilder query = new StringBuilder("SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, m.active, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE m.active = 1 AND (first_name LIKE :searchInput OR last_name LIKE :searchInput OR co.name LIKE :searchInput OR jt.name LIKE :searchInput)");
 
         for(Map.Entry<String, String> filter : filters.entrySet())
         {
-            String filterType = filter.getKey();
             String input = filter.getValue();
 
-            if(filterType.equals("chapter"))
+            if(!input.equals("-1"))
             {
-                if(!input.equals("N/A"))
-                {
-                    query.append(" AND ch.name LIKE \"").append(input).append("\" ");
-                }
-            }
+                String filterType = filter.getKey();
 
-            if(filterType.equals("volunteer"))
-            {
-                if(!input.equals("-1"))
+                if (filterType.equals("chapter"))
+                {
+                    query.append(" AND ch.chapter_id = ").append(input);
+                }
+                if (filterType.equals("volunteer"))
                 {
                     query.append(" AND m.volunteer = ").append(input);
                 }
-            }
-
-            if(filterType.equals("date"))
-            {
-                if(!input.equals("-1"))
+                if (filterType.equals("date"))
                 {
-                    if(input.equals("0"))
+                    if (input.equals("0"))
                     {
                         query.append(" AND TIMESTAMPDIFF(YEAR, m.date_joined, CURDATE()) < 1 ");
                     }
-                    if(input.equals("1"))
+                    if (input.equals("1"))
                     {
                         query.append(" AND (TIMESTAMPDIFF(YEAR, date_joined, CURDATE()) < 3) ");
                     }
-                    if(input.equals("2"))
+                    if (input.equals("2"))
                     {
                         query.append(" AND TIMESTAMPDIFF(YEAR, m.date_joined, CURDATE()) >= 3 ");
                     }

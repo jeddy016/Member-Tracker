@@ -28,9 +28,18 @@ public class MemberController extends Controller
     @Transactional
     public Result renderAddMember()
     {
-        List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
+        List<Chapter> chapters = getChapters();
         List<String> errors = new ArrayList<>();
         return ok(views.html.addMember.render(chapters, errors));
+    }
+
+    @Transactional
+    public Result renderEditMember(Integer id)
+    {
+        MemberDetail member = getSingleMember(id);
+        List<Chapter> chapters = getChapters();
+        List<String> errors = new ArrayList<>();
+        return ok(views.html.editMember.render(member, chapters, errors));
     }
 
     @Transactional
@@ -49,28 +58,11 @@ public class MemberController extends Controller
         }
         else
         {
-            List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
+            List<Chapter> chapters = getChapters();
             List<String> errors = formHelper.showErrors();
-
             return ok(views.html.addMember.render(chapters, errors));
         }
         return redirect(routes.BaseController.index());
-    }
-
-    @Transactional
-    public Result renderEditMember(Integer id)
-    {
-        String query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, m.active, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE m.member_id = :id";
-
-        MemberDetail member = (MemberDetail) jpaApi.em()
-                .createNativeQuery(query, MemberDetail.class)
-                .setParameter("id", id)
-                .getSingleResult();
-
-        List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
-        List<String> errors = new ArrayList<>();
-
-        return ok(views.html.editMember.render(member, chapters, errors));
     }
 
     @Transactional
@@ -102,16 +94,9 @@ public class MemberController extends Controller
         }
         else
         {
-            String query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE m.member_id = :id";
-
-            MemberDetail member = (MemberDetail) jpaApi.em()
-                    .createNativeQuery(query, MemberDetail.class)
-                    .setParameter("id", id)
-                    .getSingleResult();
-
-            List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
+            MemberDetail member = getSingleMember(id);
+            List<Chapter> chapters = getChapters();
             List<String> errors = formHelper.showErrors();
-
             return ok(editMember.render(member, chapters, errors));
         }
 
@@ -174,5 +159,22 @@ public class MemberController extends Controller
         }
 
         return id;
+    }
+
+    @Transactional
+    private List<Chapter> getChapters()
+    {
+        return jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
+    }
+
+    @Transactional
+    private MemberDetail getSingleMember(int id)
+    {
+        String query = "SELECT m.member_id as id, m.first_name as firstName, m.last_name as lastName, m.email, m.phone, m.active, ch.name as chapter, m.date_joined as dateJoined, m.volunteer, co.name as company, jt.name as jobTitle FROM member m  JOIN company co ON m.company_id = co.company_id  JOIN chapter ch ON m.chapter_id = ch.chapter_id JOIN job_title jt ON m.job_title_id = jt.job_title_id WHERE m.member_id = :id";
+
+        return (MemberDetail) jpaApi.em()
+                .createNativeQuery(query, MemberDetail.class)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 }
