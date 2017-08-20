@@ -1,6 +1,7 @@
 package models;
 
 import play.Logger;
+import play.data.DynamicForm;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MemberForm
+public class MemberFormHelper
 {
     private String firstName;
     private String lastName;
@@ -19,6 +20,10 @@ public class MemberForm
     private String company;
     private String jobTitle;
     private String dateJoined;
+    private int chapter;
+    private int jobTitleID;
+    private int companyID;
+    private int volunteer;
     private List<String> errors = new ArrayList<>();
 
     public void setFirstName(String firstName)
@@ -56,6 +61,16 @@ public class MemberForm
         this.dateJoined = dateJoined;
     }
 
+    public void setJobTitleID(int jobTitleID)
+    {
+        this.jobTitleID = jobTitleID;
+    }
+
+    public void setCompanyID(int companyID)
+    {
+        this.companyID = companyID;
+    }
+
     public String getFirstName()
     {
         return firstName;
@@ -76,6 +91,26 @@ public class MemberForm
         phone = phone.replaceAll( "[^\\d]", "" );
 
         return phone;
+    }
+
+    public int getChapter()
+    {
+        return chapter;
+    }
+
+    public int getJobTitleID()
+    {
+        return jobTitleID;
+    }
+
+    public int getCompanyID()
+    {
+        return companyID;
+    }
+
+    public int getVolunteer()
+    {
+        return volunteer;
     }
 
     public String getCompany()
@@ -251,4 +286,16 @@ public class MemberForm
         return errors;
     }
 
+    public void fillForm(DynamicForm form)
+    {
+        this.chapter = Integer.parseInt(form.get("chapter"));
+        this.volunteer = Integer.parseInt(form.get("volunteer"));
+        this.firstName = form.get("firstName");
+        this.lastName = form.get("lastName");
+        this.email = form.get("email");
+        this.phone = form.get("phone");
+        this.company = form.get("company");
+        this.jobTitle = form.get("job");
+        this.dateJoined = form.get("joinDate");
+    }
 }

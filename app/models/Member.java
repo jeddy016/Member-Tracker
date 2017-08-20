@@ -42,6 +42,22 @@ public class Member
     @Column(name="active")
     private int active;
 
+    public Member(){}
+
+    public Member(MemberFormHelper helper)
+    {
+        this.volunteer = helper.getVolunteer();
+        this.companyID = helper.getCompanyID();
+        this.jobTitleID = helper.getJobTitleID();
+        this.firstName = helper.getFirstName();
+        this.lastName = helper.getLastName();
+        this.email = helper.getEmail();
+        this.phone = helper.getPhone();
+        this.dateJoined = helper.getDateJoined();
+        this.chapterID = helper.getChapter();
+        this.active = 1;
+    }
+
     public int getId()
     {
         return id;

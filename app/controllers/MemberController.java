@@ -7,6 +7,8 @@ import play.db.jpa.JPAApi;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.editMember;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,43 +37,20 @@ public class MemberController extends Controller
     public Result addMember()
     {
         DynamicForm form = formFactory.form().bindFromRequest();
+        MemberFormHelper formHelper = new MemberFormHelper();
+        formHelper.fillForm(form);
 
-        MemberForm memberForm = new MemberForm();
-
-        memberForm.setFirstName(form.get("firstName"));
-        memberForm.setLastName(form.get("lastName"));
-        memberForm.setEmail(form.get("email"));
-        memberForm.setPhone(form.get("phone"));
-        memberForm.setCompany(form.get("company"));
-        memberForm.setJobTitle(form.get("job"));
-        memberForm.setDateJoined(form.get("joinDate"));
-
-        if(memberForm.isValid())
+        if(formHelper.isValid())
         {
-            int chapter = Integer.parseInt(form.get("chapter"));
-            int volunteer = Integer.parseInt(form.get("volunteer"));
-            int companyID = getCompanyID(memberForm.getCompany());
-            int jobTitleID = getJobTitleID(memberForm.getJobTitle());
-
-            Member member = new Member();
-
-            member.setFirstName(memberForm.getFirstName());
-            member.setLastName(memberForm.getLastName());
-            member.setEmail(memberForm.getEmail());
-            member.setPhone(memberForm.getPhone());
-            member.setJobTitleID(jobTitleID);
-            member.setCompanyID(companyID);
-            member.setDateJoined(memberForm.getDateJoined());
-            member.setChapterID(chapter);
-            member.setVolunteer(volunteer);
-            member.setActive(1);
-
+            formHelper.setCompanyID(getCompanyID(formHelper.getCompany()));
+            formHelper.setJobTitleID(getJobTitleID(formHelper.getJobTitle()));
+            Member member = new Member(formHelper);
             jpaApi.em().persist(member);
         }
         else
         {
             List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
-            List<String> errors = memberForm.showErrors();
+            List<String> errors = formHelper.showErrors();
 
             return ok(views.html.addMember.render(chapters, errors));
         }
@@ -98,34 +77,26 @@ public class MemberController extends Controller
     public Result editMember(Integer id)
     {
         DynamicForm form = formFactory.form().bindFromRequest();
+        MemberFormHelper formHelper = new MemberFormHelper();
+        formHelper.fillForm(form);
 
-        MemberForm memberForm = new MemberForm();
-
-        memberForm.setFirstName(form.get("firstName"));
-        memberForm.setLastName(form.get("lastName"));
-        memberForm.setEmail(form.get("email"));
-        memberForm.setPhone(form.get("phone"));
-        memberForm.setCompany(form.get("company"));
-        memberForm.setJobTitle(form.get("job"));
-        memberForm.setDateJoined(form.get("joinDate"));
-
-        if(memberForm.isValid())
+        if(formHelper.isValid())
         {
-            int chapter = Integer.parseInt(form.get("chapter"));
-            int volunteer = Integer.parseInt(form.get("volunteer"));
-            int companyID = getCompanyID(memberForm.getCompany());
-            int jobTitleID = getJobTitleID(memberForm.getJobTitle());
+            formHelper.setCompanyID(getCompanyID(formHelper.getCompany()));
+            formHelper.setJobTitleID(getJobTitleID(formHelper.getJobTitle()));
 
-            jpaApi.em().createQuery("UPDATE Member SET firstName = :first, lastName = :last, email = :email, phone = :phone, companyID = :companyID, jobTitleID = :jobTitleID, volunteer = :volunteer, chapterID = :chapter, dateJoined = :dateJoined WHERE id = :id")
-                    .setParameter("first", memberForm.getFirstName())
-                    .setParameter("last", memberForm.getLastName())
-                    .setParameter("email", memberForm.getEmail())
-                    .setParameter("phone", memberForm.getPhone())
-                    .setParameter("companyID", companyID)
-                    .setParameter("jobTitleID",jobTitleID)
-                    .setParameter("volunteer", volunteer)
-                    .setParameter("chapter", chapter)
-                    .setParameter("dateJoined", memberForm.getDateJoined())
+            String query = "UPDATE Member SET firstName = :first, lastName = :last, email = :email, phone = :phone, companyID = :companyID, jobTitleID = :jobTitleID, volunteer = :volunteer, chapterID = :chapter, dateJoined = :dateJoined WHERE id = :id";
+
+            jpaApi.em().createQuery(query)
+                    .setParameter("first", formHelper.getFirstName())
+                    .setParameter("last", formHelper.getLastName())
+                    .setParameter("email", formHelper.getEmail())
+                    .setParameter("phone", formHelper.getPhone())
+                    .setParameter("companyID", formHelper.getCompanyID())
+                    .setParameter("jobTitleID",formHelper.getJobTitleID())
+                    .setParameter("volunteer", formHelper.getVolunteer())
+                    .setParameter("chapter", formHelper.getChapter())
+                    .setParameter("dateJoined", formHelper.getDateJoined())
                     .setParameter("id", id)
                     .executeUpdate();
         }
@@ -139,9 +110,9 @@ public class MemberController extends Controller
                     .getSingleResult();
 
             List<Chapter> chapters = jpaApi.em().createQuery("SELECT c FROM Chapter c", Chapter.class).getResultList();
-            List<String> errors = memberForm.showErrors();
+            List<String> errors = formHelper.showErrors();
 
-            return ok(views.html.editMember.render(member, chapters, errors));
+            return ok(editMember.render(member, chapters, errors));
         }
 
         return redirect(routes.BaseController.index());
