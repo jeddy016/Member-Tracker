@@ -3,28 +3,29 @@ package models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "chapter")
-public class Chapter
+public class ChapterDetail
 {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="chapter_id")
+    @Column
     private int id;
 
-    @Column(name="name")
+    @Column
     private String name;
 
-    @Column(name="meeting_place")
+    @Column
     private String meetingPlace;
 
-    @Column(name="street_address")
+    @Column
     private String streetAddress;
 
-    @Column(name="city")
+    @Column
     private String city;
 
-    @Column(name="leader_id")
-    private Integer leaderID;
+    @Column
+    private String leader;
+
+    @Column
+    private String leaderEmail;
 
     public int getID()
     {
@@ -46,23 +47,18 @@ public class Chapter
         return streetAddress;
     }
 
-    public Integer getLeaderID()
-    {
-        return leaderID;
-    }
-
     public String getCity()
     {
         return city;
     }
 
-    public void setName(String name)
+    public String getLeader()
     {
-        this.name = name;
+        return leader;
     }
 
-    public void setLeaderID(Integer leaderID)
+    public String getLeaderEmail()
     {
-        this.leaderID = leaderID;
+        return leaderEmail;
     }
 }

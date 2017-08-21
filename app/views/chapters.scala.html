@@ -1,9 +1,50 @@
-
+@(chapters: List[ChapterDetail])
 
 <html>
-<body>
 <head>
+    <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/stylesheets/chapters.css" />
+    <link rel="stylesheet" href="/assets/lib/bootstrap-datepicker/css/bootstrap-datepicker.css" />
+    <script src= "https://use.fontawesome.com/3d943843e1.js"></script>
+    <script src="/assets/lib/jquery/jquery.min.js"></script>
+    <script src="/assets/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 </head>
-    chapters
+<body>
+<div class="sidebar">
+    <a href="http://www.winwoman.org"><img class="logo" src="/assets/images/win-logo.png" /></a>
+    <ul class="menu">
+        <a class="menu-item" href="@routes.BaseController.index"><li>Members</li></a>
+        <a class="menu-item" href="@routes.BaseController.renderAddMember"><li>Add Member</li></a>
+        <a class="menu-item" href="@routes.BaseController.renderAddChapter"><li>Add Chapter</li></a>
+    </ul>
+</div>
+
+<div class="content-container">
+    <h1>Chapters</h1>
+    <hr>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Leader</th>
+            <th>Email</th>
+            <th>Meeting Place</th>
+            <th>Address</th>
+            <th>City</th>
+        </tr>
+        @for(chapter <- chapters){
+            @if(chapter.getID != -1){
+                <tr>
+                    <td>@chapter.getName</td>
+                    <td>@chapter.getLeader</td>
+                    <td><a href="mailto:@chapter.getLeaderEmail">@chapter.getLeaderEmail</a></td>
+                    <td>@chapter.getMeetingPlace</td>
+                    <td>@chapter.getStreetAddress</td>
+                    <td>@chapter.getCity</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+<script src="/assets/javascripts/main.js"></script>
 </body>
 </html>

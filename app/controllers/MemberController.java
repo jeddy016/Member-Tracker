@@ -26,23 +26,6 @@ public class MemberController extends Controller
     }
 
     @Transactional
-    public Result renderAddMember()
-    {
-        List<Chapter> chapters = getChapters();
-        List<String> errors = new ArrayList<>();
-        return ok(views.html.addMember.render(chapters, errors));
-    }
-
-    @Transactional
-    public Result renderEditMember(Integer id)
-    {
-        MemberDetail member = getSingleMember(id);
-        List<Chapter> chapters = getChapters();
-        List<String> errors = new ArrayList<>();
-        return ok(views.html.editMember.render(member, chapters, errors));
-    }
-
-    @Transactional
     public Result addMember()
     {
         DynamicForm form = formFactory.form().bindFromRequest();
