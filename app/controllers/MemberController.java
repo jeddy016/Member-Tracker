@@ -32,19 +32,18 @@ public class MemberController extends Controller
         MemberFormHelper formHelper = new MemberFormHelper();
         formHelper.fillForm(form);
 
-        if(formHelper.isValid())
-        {
-            formHelper.setCompanyID(getCompanyID(formHelper.getCompany()));
-            formHelper.setJobTitleID(getJobTitleID(formHelper.getJobTitle()));
-            Member member = new Member(formHelper);
-            jpaApi.em().persist(member);
-        }
-        else
+        if(!formHelper.isValid())
         {
             List<Chapter> chapters = getChapters();
             List<String> errors = formHelper.showErrors();
             return ok(views.html.addMember.render(chapters, errors));
         }
+
+        Member member = new Member(formHelper);
+        member.setCompanyID(getCompanyID(formHelper.getCompany()));
+        member.setJobTitleID(getJobTitleID(formHelper.getJobTitle()));
+        jpaApi.em().persist(member);
+
         return redirect(routes.BaseController.index());
     }
 
@@ -55,33 +54,19 @@ public class MemberController extends Controller
         MemberFormHelper formHelper = new MemberFormHelper();
         formHelper.fillForm(form);
 
-        if(formHelper.isValid())
-        {
-            formHelper.setCompanyID(getCompanyID(formHelper.getCompany()));
-            formHelper.setJobTitleID(getJobTitleID(formHelper.getJobTitle()));
-
-            String query = "UPDATE Member SET firstName = :first, lastName = :last, email = :email, phone = :phone, companyID = :companyID, jobTitleID = :jobTitleID, volunteer = :volunteer, chapterID = :chapter, dateJoined = :dateJoined WHERE id = :id";
-
-            jpaApi.em().createQuery(query)
-                    .setParameter("first", formHelper.getFirstName())
-                    .setParameter("last", formHelper.getLastName())
-                    .setParameter("email", formHelper.getEmail())
-                    .setParameter("phone", formHelper.getPhone())
-                    .setParameter("companyID", formHelper.getCompanyID())
-                    .setParameter("jobTitleID",formHelper.getJobTitleID())
-                    .setParameter("volunteer", formHelper.getVolunteer())
-                    .setParameter("chapter", formHelper.getChapter())
-                    .setParameter("dateJoined", formHelper.getDateJoined())
-                    .setParameter("id", id)
-                    .executeUpdate();
-        }
-        else
+        if(!formHelper.isValid())
         {
             MemberDetail member = getSingleMember(id);
             List<Chapter> chapters = getChapters();
             List<String> errors = formHelper.showErrors();
             return ok(editMember.render(member, chapters, errors));
         }
+
+        Member member = new Member(formHelper);
+        member.setCompanyID(getCompanyID(formHelper.getCompany()));
+        member.setJobTitleID(getJobTitleID(formHelper.getJobTitle()));
+        member.setId(id);
+        jpaApi.em().merge(member);
 
         return redirect(routes.BaseController.index());
     }
@@ -130,9 +115,7 @@ public class MemberController extends Controller
             try
             {
                 JobTitle title = (JobTitle) jpaApi.em().createNativeQuery("SELECT * FROM job_title WHERE name LIKE :name", JobTitle.class).setParameter("name", name).setMaxResults(1).getSingleResult();
-
                 id = title.getId();
-
             } catch (Exception e)
             {
                 jpaApi.em().createNativeQuery("INSERT INTO job_title(name) VALUES(:name)").setParameter("name", name).executeUpdate();
@@ -140,7 +123,6 @@ public class MemberController extends Controller
                 id = (Integer) jpaApi.em().createNativeQuery("SELECT job_title_id FROM job_title WHERE name LIKE :name").setParameter("name", name).getSingleResult();
             }
         }
-
         return id;
     }
 

@@ -42,6 +42,11 @@ public class Chapter
         }
     }
 
+    public void setID(int id)
+    {
+        this.id = id;
+    }
+
     public int getID()
     {
         return id;

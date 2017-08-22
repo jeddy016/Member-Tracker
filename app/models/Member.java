@@ -72,4 +72,19 @@ public class Member
     {
         return lastName;
     }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public void setJobTitleID(int jobTitleID)
+    {
+        this.jobTitleID = jobTitleID;
+    }
+
+    public void setCompanyID(int companyID)
+    {
+        this.companyID = companyID;
+    }
 }
