@@ -22,6 +22,9 @@ public class ChapterDetail
     private String city;
 
     @Column
+    private Integer leaderID;
+
+    @Column
     private String leader;
 
     @Column
@@ -50,6 +53,11 @@ public class ChapterDetail
     public String getCity()
     {
         return city;
+    }
+
+    public int getLeaderID()
+    {
+        return leaderID;
     }
 
     public String getLeader()

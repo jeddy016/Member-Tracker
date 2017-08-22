@@ -3,12 +3,15 @@ GET     /                           controllers.BaseController.index
 GET     /editMember/:id             controllers.BaseController.renderEditMember(id:Integer)
 GET     /addMember                  controllers.BaseController.renderAddMember
 GET     /chapters                   controllers.BaseController.renderChapters
-GET     /addChapter                   controllers.BaseController.renderAddChapter
+GET     /addChapter                 controllers.BaseController.renderAddChapter
+GET     /editChapter/:id                controllers.BaseController.renderEditChapter(id:Integer)
 
 POST    /addMember                  controllers.MemberController.addMember
 POST    /editMember/:id             controllers.MemberController.editMember(id:Integer)
-GET    /deleteMember/:id            controllers.MemberController.deleteMember(id:Integer)
+GET     /deleteMember/:id           controllers.MemberController.deleteMember(id:Integer)
 
+GET     /editChapter                controllers.ChapterController.editChapter(id:Integer)
+POST    /addChapter                 controllers.ChapterController.addChapter
 
 GET     /search                     controllers.SearchController.search
 

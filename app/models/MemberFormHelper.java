@@ -1,8 +1,6 @@
 package models;
 
-import play.Logger;
 import play.data.DynamicForm;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;

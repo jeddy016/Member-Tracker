@@ -62,13 +62,23 @@ public class BaseController extends Controller
 
     public Result renderAddChapter()
     {
-        return ok("add chapter");
+        List<String> errors = new ArrayList<>();
+        return ok(views.html.addChapter.render(errors));
+    }
+
+    @Transactional
+    public Result renderEditChapter(int id)
+    {
+        List<String> errors = new ArrayList<>();
+        List<Member> members = jpaApi.em().createQuery("SELECT m FROM Member m WHERE chapterID = :id", Member.class).setParameter("id", id).getResultList();
+        ChapterDetail chapter = (ChapterDetail) jpaApi.em().createNativeQuery("SELECT c.chapter_id AS id, c.name AS name, c.meeting_place AS meetingPlace, c.street_address AS streetAddress, c.city AS city, c.leader_id AS leaderID, (SELECT CONCAT(first_name, ' ',last_name) FROM member WHERE member_id = c.leader_id) AS leader, (SELECT email FROM member WHERE member_id = c.leader_id) AS leaderEmail FROM chapter c WHERE c.chapter_id = :id ORDER BY c.name;", ChapterDetail.class).setParameter("id", id).getSingleResult();
+        return ok(views.html.editChapter.render(chapter, members, errors));
     }
 
     @Transactional
     public List<ChapterDetail> getChapters()
     {
-        String query = "SELECT c.chapter_id AS id, c.name AS name, c.meeting_place AS meetingPlace, c.street_address AS streetAddress, c.city AS city, (SELECT CONCAT(first_name, ' ',last_name) FROM member WHERE member_id = c.leader_id) AS leader, (SELECT email FROM member WHERE member_id = c.leader_id) AS leaderEmail FROM chapter c ORDER BY c.name;";
+        String query = "SELECT c.chapter_id AS id, c.name AS name, c.meeting_place AS meetingPlace, c.street_address AS streetAddress, c.city AS city, c.leader_id AS leaderID, (SELECT CONCAT(first_name, ' ',last_name) FROM member WHERE member_id = c.leader_id) AS leader, (SELECT email FROM member WHERE member_id = c.leader_id) AS leaderEmail FROM chapter c ORDER BY c.name;";
 
         return jpaApi.em().createNativeQuery(query, ChapterDetail.class).getResultList();
     }

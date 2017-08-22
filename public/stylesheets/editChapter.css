@@ -82,7 +82,7 @@ li:hover {
 .btn-success {
     width: 80%;
     margin-top: 7%;
-    margin-left: 6.5%;
+    margin-left: 6%;
 }
 
 .btn-danger {
@@ -92,5 +92,5 @@ li:hover {
 .btn-default {
     width: 80%;
     margin-top: 1%;
-    margin-left: 6.5%;
+    margin-left: 6%;
 }

@@ -1,0 +1,52 @@
+@(errors: List[String])
+
+<html>
+<head>
+    <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/stylesheets/editChapter.css" />
+    <link rel="stylesheet" href="/assets/lib/bootstrap-datepicker/css/bootstrap-datepicker.css" />
+    <script src= "https://use.fontawesome.com/3d943843e1.js"></script>
+    <script src="/assets/lib/jquery/jquery.min.js"></script>
+    <script src="/assets/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+</head>
+<body>
+<div class="sidebar">
+    <a href="http://www.winwoman.org"><img class="logo" src="/assets/images/win-logo.png" /></a>
+    <ul class="menu">
+        <a class="menu-item" href="@routes.BaseController.index"><li>Members</li></a>
+        <a class="menu-item" href="@routes.BaseController.renderAddMember"><li>Add Member</li></a>
+        <a class="menu-item" href="@routes.BaseController.renderChapters"><li>Chapters</li></a>
+    </ul>
+</div>
+<div class="content-container">
+    <h1>Add Chapter</h1>
+    <hr>
+    @for(error <- errors){
+    <p class="error">@error</p>
+    }
+    <form id="add-chapter" method ="POST" action="@routes.ChapterController.addChapter">
+        <table>
+            <tr>
+                <th>*Name</th>
+                <th>Meeting Place</th>
+            </tr>
+            <tr>
+                <td><input name="name" class="form-control"></td>
+                <td><input name="meetingPlace" class="form-control" /></td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <th>City</th>
+            </tr>
+            <tr>
+                <td><input name="streetAddress" class="form-control" /></td>
+                <td><input name="city" class="form-control" /></td>
+            </tr>
+        </table>
+        <button class="btn btn-success" type="submit" form="add-chapter">Submit</button>
+        <a class="btn btn-default" href="@routes.BaseController.renderChapters">Cancel</a>
+    </form>
+</div>
+<script src="/assets/javascripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+@(chapter : ChapterDetail, members: List[Member], errors: List[String])
+
+<html>
+<head>
+    <link rel="stylesheet" href="/assets/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/stylesheets/editChapter.css" />
+    <link rel="stylesheet" href="/assets/lib/bootstrap-datepicker/css/bootstrap-datepicker.css" />
+    <script src= "https://use.fontawesome.com/3d943843e1.js"></script>
+    <script src="/assets/lib/jquery/jquery.min.js"></script>
+    <script src="/assets/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+</head>
+<body>
+<div class="sidebar">
+    <a href="http://www.winwoman.org"><img class="logo" src="/assets/images/win-logo.png" /></a>
+    <ul class="menu">
+        <a class="menu-item" href="@routes.BaseController.index"><li>Members</li></a>
+        <a class="menu-item" href="@routes.BaseController.renderAddMember"><li>Add Member</li></a>
+        <a class="menu-item" href="@routes.BaseController.renderChapters"><li>Chapters</li></a>
+        <a class="menu-item" href="@routes.BaseController.renderAddChapter"><li>Add Chapter</li></a>
+    </ul>
+</div>
+<div class="content-container">
+    <button class="btn btn-danger">Remove Chapter</button>
+    <h1>Edit Chapter</h1>
+
+    <hr>
+    @for(error <- errors){
+    <p class="error">@error</p>
+    }
+    <form id="edit-chapter" method ="POST" action="@routes.ChapterController.editChapter(chapter.getID)">
+        <table>
+            <tr>
+                <th>*Name</th>
+                <th>Leader</th>
+            </tr>
+            <tr>
+                <td><input name="name" class="form-control" value="@chapter.getName"></td>
+                <td>
+                    <select name="leaderID" class="form-control">
+                    @for(member <- members){
+                        @if(member.getID == chapter.getLeaderID){
+                            <option value="@member.getID" selected>@member.getFirstName @member.getLastName</option>
+                        }else{
+                            <option value="@member.getID">@member.getFirstName @member.getLastName</option>
+                        }
+                    }
+                </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Meeting Place</th>
+                <th>Address</th>
+            </tr>
+            <tr>
+                <td><input name="meetingPlace" class="form-control"  value="@chapter.getMeetingPlace" /></td>
+                <td><input name="streetAddress" class="form-control" value="@chapter.getStreetAddress" /></td>
+            </tr>
+            <tr>
+                <th>City</th>
+            </tr>
+            <tr>
+                <td><input name="city" class="form-control" value="@chapter.getCity"/></td>
+            </tr>
+        </table>
+
+        <button class="btn btn-success" type="submit" form="edit-chapter">Update</button>
+        <a class="btn btn-default" href="@routes.BaseController.renderChapters">Cancel</a>
+    </form>
+</div>
+<script src="/assets/javascripts/main.js"></script>
+</body>
+</html>

@@ -26,7 +26,7 @@
         <tr>
             <th>Name</th>
             <th>Leader</th>
-            <th>Email</th>
+            <th>Leader Email</th>
             <th>Meeting Place</th>
             <th>Address</th>
             <th>City</th>
@@ -34,7 +34,7 @@
         @for(chapter <- chapters){
             @if(chapter.getID != -1){
                 <tr>
-                    <td>@chapter.getName</td>
+                    <td><a href="@routes.BaseController.renderEditChapter(chapter.getID)">@chapter.getName</a></td>
                     <td>@chapter.getLeader</td>
                     <td><a href="mailto:@chapter.getLeaderEmail">@chapter.getLeaderEmail</a></td>
                     <td>@chapter.getMeetingPlace</td>

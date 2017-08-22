@@ -57,4 +57,19 @@ public class Member
         this.chapterID = helper.getChapter();
         this.active = 1;
     }
+
+    public int getID()
+    {
+        return id;
+    }
+
+    public String getFirstName()
+    {
+        return firstName;
+    }
+
+    public String getLastName()
+    {
+        return lastName;
+    }
 }

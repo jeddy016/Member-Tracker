@@ -18,6 +18,7 @@
         </ul>
     </div>
     <div class="content-container">
+        <a class="btn btn-danger" href="@routes.MemberController.deleteMember(member.getID)">Delete Member</a>
         <h1>Edit Member</h1>
         <hr>
         @for(error <- errors){
@@ -83,7 +84,6 @@
                 </tr>
             </table>
             <button class="btn btn-success" type="submit" form="edit-member">Update</button>
-            <a class="btn btn-danger" href="@routes.MemberController.deleteMember(member.getID)">Delete</a>
             <a class="btn btn-default" href="@routes.BaseController.index">Cancel</a>
         </form>
     </div>

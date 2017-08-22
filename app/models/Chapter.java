@@ -1,5 +1,7 @@
 package models;
 
+import play.data.DynamicForm;
+
 import javax.persistence.*;
 
 @Entity
@@ -25,6 +27,20 @@ public class Chapter
 
     @Column(name="leader_id")
     private Integer leaderID;
+
+    public Chapter(){};
+
+    public Chapter(DynamicForm form)
+    {
+        this.name = form.get("name");
+        this.meetingPlace = form.get("meetingPlace");
+        this.streetAddress = form.get("streetAddress");
+        this.city = form.get("city");
+        if(form.get("leaderID") != null)
+        {
+            this.leaderID = Integer.parseInt(form.get("leaderID"));
+        }
+    }
 
     public int getID()
     {
